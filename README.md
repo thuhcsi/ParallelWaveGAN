@@ -2,6 +2,28 @@
 
 ![](https://github.com/kan-bayashi/ParallelWaveGAN/workflows/CI/badge.svg) [![](https://img.shields.io/pypi/v/parallel-wavegan)](https://pypi.org/project/parallel-wavegan/) ![](https://img.shields.io/pypi/pyversions/parallel-wavegan) ![](https://img.shields.io/pypi/l/parallel-wavegan) [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/espnet/notebook/blob/master/espnet2_tts_realtime_demo.ipynb)
 
+## Quick example of using pretrained model
+
+You can use the wrapped Vocoder interface to use the model with pretrained checkpoint.
+
+Suppose the pretrained checkpoint and related configurations are stored under `pretrained/checkpoint` and `pretrained/config.yml`, the following python code will work:
+
+```python
+from ParallelWaveGAN.vocoder import Vocoder as ParallelWaveGAN
+
+# load pretrained checkpoint
+#   will automatically load related configurations
+pwGAN = ParallelWaveGAN('pretrained/checkpoint')
+
+# you can also specify the configuration file explicitly
+pwGAN = ParallelWaveGAN('pretrained/checkpoint', 'pretrained/config.yml')
+
+# mel2wav inverse
+wav = pwGAN.mel2wav(mel)
+```
+
+## Introduction
+
 This repository provides **UNOFFICIAL** [PWG](https://arxiv.org/abs/1910.11480), [MelGAN](https://arxiv.org/abs/1910.06711), and [MB-MelGAN](https://arxiv.org/abs/2005.05106) implementations with Pytorch.  
 You can combine these state-of-the-art non-autoregressive models to build your own great vocoder!
 
