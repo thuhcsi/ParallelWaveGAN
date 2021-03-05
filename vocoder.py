@@ -3,6 +3,7 @@ import os
 
 import torch
 import yaml
+from scipy.io import wavfile
 
 from parallel_wavegan.utils import load_model
 
@@ -33,11 +34,12 @@ class Vocoder:
         self._model = self._model.eval().to(self._device)
 
 
-    def mel2wav(self, mel):
+    def mel2wav(self, mel, output_file=None):
         """
         Parameters
         ----------
             mel: numpy.ndarray of mel spectrogram [shape=(#spec_frame, @n_mels)]
+            output_file: file path name to write the generated wav data
 
         Returns
         -------
@@ -45,4 +47,8 @@ class Vocoder:
         """
         with torch.no_grad():
             mel = torch.tensor(mel, dtype=torch.float).to(self._device)
-            return self._model.inference(mel).view(-1).cpu().numpy()
+            wav = self._model.inference(mel).view(-1).cpu().numpy()
+
+        if output_file:
+            wavfile.write(output_file, self._config['sampling_rate'], (wav * 32767).astype('int16'))
+        return wav
